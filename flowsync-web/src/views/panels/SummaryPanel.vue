@@ -106,7 +106,7 @@ const filteredSummaries = computed(() => {
   if (filterCreator.value) {
     list = list.filter((s) => s.createdBy === filterCreator.value)
   }
-  return list
+  return [...list].sort((a, b) => new Date(a.createTime) - new Date(b.createTime))
 })
 
 // 获取总结列表

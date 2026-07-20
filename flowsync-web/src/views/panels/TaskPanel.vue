@@ -142,7 +142,7 @@ const filteredTasks = computed(() => {
     const kw = searchKeyword.value.toLowerCase()
     list = list.filter((t) => t.title && t.title.toLowerCase().includes(kw))
   }
-  return list
+  return [...list].sort((a, b) => new Date(a.createTime) - new Date(b.createTime))
 })
 
 // 获取数据

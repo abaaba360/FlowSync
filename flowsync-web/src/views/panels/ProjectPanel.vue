@@ -137,7 +137,7 @@ const filteredProjects = computed(() => {
   if (filterPriority.value) {
     list = list.filter((p) => p.priority === filterPriority.value)
   }
-  return list
+  return [...list].sort((a, b) => new Date(a.createTime) - new Date(b.createTime))
 })
 
 // 获取项目列表

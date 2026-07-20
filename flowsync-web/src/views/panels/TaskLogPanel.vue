@@ -83,7 +83,7 @@ const filteredLogs = computed(() => {
   if (filterOperator.value) {
     list = list.filter((l) => l.operatorId === filterOperator.value)
   }
-  return list
+  return [...list].sort((a, b) => new Date(a.createTime) - new Date(b.createTime))
 })
 
 // 获取进度记录

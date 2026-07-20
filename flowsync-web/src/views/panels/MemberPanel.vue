@@ -86,7 +86,7 @@ const filteredMembers = computed(() => {
   if (filterRole.value) {
     list = list.filter((m) => m.role === filterRole.value)
   }
-  return list
+  return [...list].sort((a, b) => new Date(a.createTime) - new Date(b.createTime))
 })
 
 const fetchMembers = async () => {
