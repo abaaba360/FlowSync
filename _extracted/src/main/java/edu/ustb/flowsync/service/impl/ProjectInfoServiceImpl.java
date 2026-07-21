@@ -38,7 +38,7 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     @Override
     public List<ProjectInfo> findList() {
         QueryWrapper<ProjectInfo> wrapper = new QueryWrapper<>();
-        wrapper.orderByAsc("id");
+        wrapper.orderByDesc("id");
         return projectInfoMapper.selectList(wrapper);
     }
 }

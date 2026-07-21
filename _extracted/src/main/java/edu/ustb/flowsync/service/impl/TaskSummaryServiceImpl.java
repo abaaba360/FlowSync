@@ -22,7 +22,7 @@ public class TaskSummaryServiceImpl implements TaskSummaryService {
     @Override
     public List<TaskSummary> findList() {
         QueryWrapper<TaskSummary> wrapper = new QueryWrapper<>();
-        wrapper.orderByAsc("id");
+        wrapper.orderByDesc("id");
         return taskSummaryMapper.selectList(wrapper);
     }
 }

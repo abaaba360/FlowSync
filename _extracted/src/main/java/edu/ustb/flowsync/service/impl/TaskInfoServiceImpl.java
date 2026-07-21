@@ -47,7 +47,7 @@ public class TaskInfoServiceImpl implements TaskInfoService {
         if (projectId != null) {
             wrapper.eq("project_id", projectId);
         }
-        wrapper.orderByAsc("id");
+        wrapper.orderByDesc("id");
         return taskInfoMapper.selectList(wrapper);
     }
 }

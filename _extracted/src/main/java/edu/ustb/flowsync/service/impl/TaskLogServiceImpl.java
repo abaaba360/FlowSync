@@ -25,7 +25,7 @@ public class TaskLogServiceImpl implements TaskLogService {
         if (taskId != null) {
             wrapper.eq("task_id", taskId);
         }
-        wrapper.orderByAsc("id");
+        wrapper.orderByDesc("id");
         return taskLogMapper.selectList(wrapper);
     }
 }
