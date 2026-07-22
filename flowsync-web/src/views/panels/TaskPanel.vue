@@ -101,7 +101,7 @@ import PageHeader from '@/components/common/PageHeader.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 import StatusTag from '@/components/common/StatusTag.vue'
 import TaskDialog from '@/components/task/TaskDialog.vue'
-import { getTaskList, saveTask, deleteTask } from '@/api/task'
+import { getTaskList, saveTask, deleteTask, updateTaskStatus } from '@/api/task'
 import { getProjectList } from '@/api/project'
 import { getUserList } from '@/api/user'
 import { isLeader, getCurrentUserId } from '@/utils/auth'
@@ -199,8 +199,14 @@ const handleDelete = (row) => {
 
 const handleSubmit = async (data) => {
   try {
-    await saveTask(data)
-    ElMessage.success(data.id ? '任务更新成功' : '任务创建成功')
+    // 成员只能更新自己任务的状态，走专用接口
+    if (!isLeader() && data.id) {
+      await updateTaskStatus(data.id, data.status)
+      ElMessage.success('任务状态更新成功')
+    } else {
+      await saveTask(data)
+      ElMessage.success(data.id ? '任务更新成功' : '任务创建成功')
+    }
     dialogVisible.value = false
     fetchTasks()
   } catch {

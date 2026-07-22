@@ -1,0 +1,4 @@
+edu\ustb\flowsync\controller\ApiControllerContractTest.class
+edu\ustb\flowsync\exception\GlobalExceptionHandlerTest.class
+edu\ustb\flowsync\service\impl\AuthServiceImplTest.class
+edu\ustb\flowsync\utils\MD5UtilTest.class

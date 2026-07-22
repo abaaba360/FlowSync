@@ -1,6 +1,7 @@
 package edu.ustb.flowsync.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -29,4 +30,14 @@ public class TaskInfo {
     private LocalDate dueDate;
     private String aiSuggestion;
     private LocalDateTime createTime;
+
+    // 以下为展示字段，不存数据库
+    @TableField(exist = false)
+    private String projectName;
+    @TableField(exist = false)
+    private String parentTitle;
+    @TableField(exist = false)
+    private String assigneeName;
+    @TableField(exist = false)
+    private String creatorName;
 }

@@ -1,6 +1,7 @@
 package edu.ustb.flowsync.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -22,4 +23,9 @@ public class TaskLog {
     private String content;
     private Long operatorId;
     private LocalDateTime createTime;
+
+    @TableField(exist = false)
+    private String taskTitle;
+    @TableField(exist = false)
+    private String operatorName;
 }

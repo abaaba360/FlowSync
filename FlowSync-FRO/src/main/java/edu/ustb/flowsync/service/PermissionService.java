@@ -52,7 +52,7 @@ public class PermissionService {
         }
         TaskInfo task = findTask(taskId);
         ProjectInfo project = findProject(task.getProjectId());
-        if (isProjectLeader(user) && Objects.equals(project.getOwnerId(), user.getId())) {
+        if (isProjectLeader(user)) {
             return;
         }
         throwForbidden();
@@ -72,7 +72,7 @@ public class PermissionService {
             return;
         }
         ProjectInfo project = findProject(task.getProjectId());
-        if (isProjectLeader(user) && Objects.equals(project.getOwnerId(), user.getId())) {
+        if (isProjectLeader(user)) {
             return;
         }
         throwForbidden();

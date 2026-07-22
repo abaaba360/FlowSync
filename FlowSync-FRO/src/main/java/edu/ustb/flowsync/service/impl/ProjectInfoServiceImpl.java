@@ -3,7 +3,9 @@ package edu.ustb.flowsync.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import edu.ustb.flowsync.auth.AuthContext;
 import edu.ustb.flowsync.entity.ProjectInfo;
+import edu.ustb.flowsync.entity.User;
 import edu.ustb.flowsync.mapper.ProjectInfoMapper;
+import edu.ustb.flowsync.mapper.UserMapper;
 import edu.ustb.flowsync.service.PermissionService;
 import edu.ustb.flowsync.service.ProjectInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ import java.util.List;
 public class ProjectInfoServiceImpl implements ProjectInfoService {
     @Autowired
     private ProjectInfoMapper projectInfoMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired
     private PermissionService permissionService;
@@ -45,7 +50,14 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     @Override
     public List<ProjectInfo> findList() {
         QueryWrapper<ProjectInfo> wrapper = new QueryWrapper<>();
-        wrapper.orderByDesc("id");
-        return projectInfoMapper.selectList(wrapper);
+        wrapper.orderByAsc("id");
+        List<ProjectInfo> list = projectInfoMapper.selectList(wrapper);
+        for (ProjectInfo p : list) {
+            if (p.getOwnerId() != null) {
+                User u = userMapper.selectById(p.getOwnerId());
+                if (u != null) p.setOwnerName(u.getRealName());
+            }
+        }
+        return list;
     }
 }

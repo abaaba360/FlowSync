@@ -15,6 +15,11 @@ export function saveTask(task) {
   })
 }
 
+// 更新任务状态（成员用）
+export function updateTaskStatus(id, status) {
+  return request.patch(`/tasks/${id}/status`, { status })
+}
+
 // 删除任务
 export function deleteTask(id) {
   return request.delete(`/tasks/${id}`)

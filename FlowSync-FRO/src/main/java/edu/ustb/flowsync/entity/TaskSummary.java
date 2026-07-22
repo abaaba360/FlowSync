@@ -1,6 +1,7 @@
 package edu.ustb.flowsync.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -23,4 +24,11 @@ public class TaskSummary {
     private String content;
     private Long createdBy;
     private LocalDateTime createTime;
+
+    @TableField(exist = false)
+    private String projectName;
+    @TableField(exist = false)
+    private String taskTitle;
+    @TableField(exist = false)
+    private String creatorName;
 }
