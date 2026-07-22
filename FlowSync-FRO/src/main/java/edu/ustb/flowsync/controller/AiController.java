@@ -1,5 +1,6 @@
 package edu.ustb.flowsync.controller;
 
+import edu.ustb.flowsync.auth.AuthContext;
 import edu.ustb.flowsync.common.ApiResponse;
 import edu.ustb.flowsync.dto.AiTaskGenerateRequest;
 import edu.ustb.flowsync.dto.AiTaskItem;
@@ -10,6 +11,7 @@ import edu.ustb.flowsync.entity.User;
 import edu.ustb.flowsync.mapper.TaskInfoMapper;
 import edu.ustb.flowsync.mapper.UserMapper;
 import edu.ustb.flowsync.service.AiService;
+import edu.ustb.flowsync.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +46,9 @@ public class AiController {
     @Autowired
     private TaskInfoMapper taskInfoMapper;
 
+    @Autowired
+    private PermissionService permissionService;
+
     /**
      * AI智能拆解 —— 生成项目任务
      * 对应前端 getAiTaskPlan(params)
@@ -56,6 +61,7 @@ public class AiController {
     public ApiResponse<AiTaskResponse> generateTasks(@RequestBody AiTaskGenerateRequest request) {
         System.out.println("[AiController] task-plan 被调用...");
         System.out.println("[AiController] 项目名称: " + request.getProjectName());
+        permissionService.requireProjectOwner(request.getProjectId());
 
         // 自动查询全部用户，构建成员列表传给AI
         List<User> users = userMapper.selectList(null);
@@ -86,8 +92,6 @@ public class AiController {
 
         Long projectId = body.get("projectId") != null
                 ? ((Number) body.get("projectId")).longValue() : null;
-        Long creatorId = body.get("creatorId") != null
-                ? ((Number) body.get("creatorId")).longValue() : null;
 
         @SuppressWarnings("unchecked")
         List<Map<String, Object>> items = (List<Map<String, Object>>) body.get("items");
@@ -95,6 +99,8 @@ public class AiController {
         if (projectId == null || items == null || items.isEmpty()) {
             return ApiResponse.fail("项目ID和任务列表不能为空");
         }
+        permissionService.requireProjectOwner(projectId);
+        Long creatorId = AuthContext.getRequiredCurrentUser().getId();
 
         int count = 0;
         for (Map<String, Object> item : items) {

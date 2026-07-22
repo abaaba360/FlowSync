@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
-import { getCurrentUser, clearCurrentUser } from '@/utils/auth'
+import { getCurrentUser, clearCurrentUser, getToken } from '@/utils/auth'
 import { EXCLUDE_CURRENT_USER_APIS } from '@/utils/constants'
 
 const request = axios.create({
@@ -13,12 +13,18 @@ const request = axios.create({
 request.interceptors.request.use(
   (config) => {
     const user = getCurrentUser()
+    const token = getToken()
     const url = config.url || ''
 
     // 判断是否需要自动附加 currentUserId
     const isExcluded = EXCLUDE_CURRENT_USER_APIS.some(
       (api) => url === api || url.startsWith(api)
     )
+
+    if (token && !isExcluded) {
+      config.headers = config.headers || {}
+      config.headers.Authorization = `Bearer ${token}`
+    }
 
     if (user && user.id && !isExcluded) {
       // 保留接口已有的查询参数

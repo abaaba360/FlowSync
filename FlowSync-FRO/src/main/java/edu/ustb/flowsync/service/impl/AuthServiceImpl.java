@@ -1,16 +1,20 @@
 package edu.ustb.flowsync.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import edu.ustb.flowsync.auth.AuthContext;
 import edu.ustb.flowsync.dto.LoginRequest;
 import edu.ustb.flowsync.dto.LoginResponse;
 import edu.ustb.flowsync.dto.PasswordUpdateRequest;
 import edu.ustb.flowsync.entity.User;
 import edu.ustb.flowsync.exception.BusinessException;
 import edu.ustb.flowsync.mapper.UserMapper;
+import edu.ustb.flowsync.service.PermissionService;
 import edu.ustb.flowsync.service.AuthService;
 import edu.ustb.flowsync.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -37,6 +41,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean updatePassword(PasswordUpdateRequest request) {
+        User currentUser = AuthContext.getRequiredCurrentUser();
+        if (!Objects.equals(currentUser.getId(), request.getUserId()) && !PermissionService.isAdmin(currentUser)) {
+            throw new BusinessException(403, "无权限操作");
+        }
         User user = userMapper.selectById(request.getUserId());
         if (user == null || !MD5Util.matches(request.getOldPassword(), user.getPassword())) {
             throw new BusinessException(400, "旧密码错误或用户不存在");

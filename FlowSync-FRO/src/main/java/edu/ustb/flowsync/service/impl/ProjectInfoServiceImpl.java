@@ -1,8 +1,10 @@
 package edu.ustb.flowsync.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import edu.ustb.flowsync.auth.AuthContext;
 import edu.ustb.flowsync.entity.ProjectInfo;
 import edu.ustb.flowsync.mapper.ProjectInfoMapper;
+import edu.ustb.flowsync.service.PermissionService;
 import edu.ustb.flowsync.service.ProjectInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,19 +16,24 @@ public class ProjectInfoServiceImpl implements ProjectInfoService {
     @Autowired
     private ProjectInfoMapper projectInfoMapper;
 
+    @Autowired
+    private PermissionService permissionService;
+
     @Override
     public boolean saveProject(ProjectInfo projectInfo, Long currentUserId) {
         if (projectInfo.getId() == null) {
-            if (projectInfo.getOwnerId() == null) {
-                projectInfo.setOwnerId(currentUserId);
-            }
+            permissionService.requireProjectCreatorRole();
+            projectInfo.setOwnerId(AuthContext.getRequiredCurrentUser().getId());
             return projectInfoMapper.insert(projectInfo) > 0;
         }
+        permissionService.requireProjectOwner(projectInfo.getId());
+        projectInfo.setOwnerId(null);
         return projectInfoMapper.updateById(projectInfo) > 0;
     }
 
     @Override
     public boolean delById(Long id) {
+        permissionService.requireProjectOwner(id);
         return projectInfoMapper.deleteById(id) > 0;
     }
 

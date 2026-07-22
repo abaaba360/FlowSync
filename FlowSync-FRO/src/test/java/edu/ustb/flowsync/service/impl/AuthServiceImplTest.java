@@ -1,5 +1,6 @@
 package edu.ustb.flowsync.service.impl;
 
+import edu.ustb.flowsync.auth.AuthContext;
 import edu.ustb.flowsync.dto.LoginRequest;
 import edu.ustb.flowsync.dto.PasswordUpdateRequest;
 import edu.ustb.flowsync.entity.User;
@@ -20,6 +21,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class AuthServiceImplTest {
+
+    @org.junit.jupiter.api.AfterEach
+    void tearDown() {
+        AuthContext.clear();
+    }
 
     @Test
     void loginMatchesMd5PasswordAndRemovesPasswordFromResponse() {
@@ -68,6 +74,7 @@ class AuthServiceImplTest {
         User user = new User();
         user.setId(1L);
         user.setPassword(MD5Util.encrypt("old-pass"));
+        AuthContext.setCurrentUser(user);
         when(userMapper.selectById(1L)).thenReturn(user);
         when(userMapper.updateById(any(User.class))).thenReturn(1);
 
