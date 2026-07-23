@@ -62,8 +62,5 @@ export const ROLE_COLOR_MAP = {
 
 // 不需要自动附加 currentUserId 的接口
 export const EXCLUDE_CURRENT_USER_APIS = [
-  '/auth/login',
-  '/ai/task-suggestion',
-  '/ai/task-plan',
-  '/ai/task-plan/import'
+  '/auth/login'
 ]

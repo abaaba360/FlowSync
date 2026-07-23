@@ -32,11 +32,6 @@
         <el-table-column type="index" label="序号" width="60" align="center" />
         <el-table-column prop="title" label="任务标题" min-width="160" show-overflow-tooltip />
         <el-table-column prop="projectName" label="所属项目" min-width="130" show-overflow-tooltip />
-        <el-table-column prop="parentTitle" label="父任务" min-width="130" show-overflow-tooltip>
-          <template #default="{ row }">
-            {{ row.parentTitle || '-' }}
-          </template>
-        </el-table-column>
         <el-table-column prop="assigneeName" label="负责人" width="100" />
         <el-table-column prop="status" label="状态" width="100" align="center">
           <template #default="{ row }">

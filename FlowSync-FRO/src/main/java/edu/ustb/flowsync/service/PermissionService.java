@@ -38,8 +38,7 @@ public class PermissionService {
         if (isAdmin(user)) {
             return;
         }
-        ProjectInfo project = findProject(projectId);
-        if (isProjectLeader(user) && Objects.equals(project.getOwnerId(), user.getId())) {
+        if (isProjectLeader(user)) {
             return;
         }
         throwForbidden();
